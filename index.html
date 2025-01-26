@@ -1,25 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buscador de Libros</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Buscador de Libros</h1>
-      <form id="search-form">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Buscar libros por título..."
-          required
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BookyFinder</title>
+        <link
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet"
         />
-        <button type="submit">Buscar</button>
-      </form>
-      <div id="results"></div>
-    </div>
-    <script src="app.js"></script>
-  </body>
+        <link rel="stylesheet" href="style.css" />
+        <link
+            rel="shortcut icon"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path d='M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z'/></svg>"
+            type="image/svg+xml"
+        />
+        <script
+            src="https://kit.fontawesome.com/76ad0dfc33.js"
+            crossorigin="anonymous"
+        ></script>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h1 class="text-center mb-4">BookyFinder</h1>
+            <form id="search-form" class="form-inline justify-content-center">
+                <input
+                    type="text"
+                    id="title-input"
+                    class="form-control mr-2 mb-md-0"
+                    placeholder="Introduce un título"
+                />
+                <input
+                    type="text"
+                    id="author-input"
+                    class="form-control mr-2 mb-md-0"
+                    placeholder="Introduce un autor"
+                />
+                <input
+                    type="text"
+                    id="isbn-input"
+                    class="form-control mr-2 mb-md-0"
+                    placeholder="Introduce un ISBN"
+                />
+                <button id="submit" type="submit" class="btn btn-primary">Buscar</button>
+            </form>
+            <div id="results" class=""></div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="app.js"></script>
+    </body>
 </html>
