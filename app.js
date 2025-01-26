@@ -122,7 +122,7 @@ $(document).ready(function() {
                     fetchPage(currentPage);
                 }
             });
-
+            $footer.empty();
             $footer.append($pagination);
         }
 
