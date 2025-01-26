@@ -4,6 +4,7 @@ $(document).ready(function() {
     const $authorInput = $('#author-input');
     const $isbnInput = $('#isbn-input');
     const $resultsDiv = $('#results');
+    const $footer = $('#footer');
 
     // Evento para manejar la búsqueda
     $searchForm.on('submit', async function(e) {
@@ -92,27 +93,25 @@ $(document).ready(function() {
             const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
             const $pagination = $(`
-                <footer class="d-flex justify-content-center">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                                <a class="page-link" href="#" aria-label="Previous" data-page="${currentPage - 1}">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                            <a class="page-link" href="#" aria-label="Previous" data-page="${currentPage - 1}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        ${Array.from({ length: endPage - startPage + 1 }, (_, i) => `
+                            <li class="page-item ${currentPage === startPage + i ? 'active' : ''}">
+                                <a class="page-link" href="#" data-page="${startPage + i}">${startPage + i}</a>
                             </li>
-                            ${Array.from({ length: endPage - startPage + 1 }, (_, i) => `
-                                <li class="page-item ${currentPage === startPage + i ? 'active' : ''}">
-                                    <a class="page-link" href="#" data-page="${startPage + i}">${startPage + i}</a>
-                                </li>
-                            `).join('')}
-                            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                                <a class="page-link" href="#" aria-label="Next" data-page="${currentPage + 1}">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </footer>
+                        `).join('')}
+                        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                            <a class="page-link" href="#" aria-label="Next" data-page="${currentPage + 1}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             `);
 
             $pagination.find('.page-link').on('click', function(e) {
@@ -124,7 +123,7 @@ $(document).ready(function() {
                 }
             });
 
-            $resultsDiv.append($pagination);
+            $footer.append($pagination);
         }
 
         function fetchPage(page) {
