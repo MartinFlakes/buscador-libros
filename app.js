@@ -29,17 +29,20 @@ $(document).ready(function() {
         const url = `https://openlibrary.org/search.json?`
         + (isbn ? `isbn=${encodeURIComponent(isbn)}&` : '')
         + (author ? `author=${encodeURIComponent(author)}&` : '')
-        + (title ? `title=${encodeURIComponent(title)}&` : '');
+        + (title ? `title=${encodeURIComponent(title)}&` : '')
+        + `page=${1}`;
 
         try {
             const response = await fetch(url);
             const data = await response.json();
             displayResults(data.docs);
+            paginar(data.numFound);
             $('#submit').prop('disabled', false);
             $('#submit').html('Buscar');
         } catch (error) {
             $resultsDiv.html('<p>Ocurrió un error al buscar. Por favor, intenta de nuevo.</p>');
-            console.error(error);
+            $('#submit').prop('disabled', false);
+            $('#submit').html('Buscar');
         }
     });
 
@@ -58,7 +61,7 @@ $(document).ready(function() {
             : false;
 
             const bookCard = $(`
-                <div class="card mb-3" style="max-width: 540px;">
+                <div class="card col-6 mb-3">
                     <div class="row g-0">
                         <div class="col-md-4">
                             ${coverUrl ? '<img src="' + coverUrl + '" class="img-fluid rounded-start" alt="' + book.title +'">' : 
@@ -77,5 +80,76 @@ $(document).ready(function() {
             `);
             $resultsDiv.append(bookCard);
         });
+    }
+
+    function paginar(totalBooks){
+        const totalPages = Math.ceil(totalBooks / 100);
+        const maxPagesToShow = 4;
+        let currentPage = 1;
+
+        function renderPagination() {
+            const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+            const $pagination = $(`
+                <footer class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                <a class="page-link" href="#" aria-label="Previous" data-page="${currentPage - 1}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            ${Array.from({ length: endPage - startPage + 1 }, (_, i) => `
+                                <li class="page-item ${currentPage === startPage + i ? 'active' : ''}">
+                                    <a class="page-link" href="#" data-page="${startPage + i}">${startPage + i}</a>
+                                </li>
+                            `).join('')}
+                            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                                <a class="page-link" href="#" aria-label="Next" data-page="${currentPage + 1}">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </footer>
+            `);
+
+            $pagination.find('.page-link').on('click', function(e) {
+                e.preventDefault();
+                const newPage = parseInt($(this).data('page'));
+                if (newPage > 0 && newPage <= totalPages) {
+                    currentPage = newPage;
+                    fetchPage(currentPage);
+                }
+            });
+
+            $resultsDiv.append($pagination);
+        }
+
+        function fetchPage(page) {
+            // Reuse the search logic to fetch the new page
+            const title = $titleInput.val().trim();
+            const author = $authorInput.val().trim();
+            const isbn = $isbnInput.val().trim();
+
+            const url = `https://openlibrary.org/search.json?`
+            + (isbn ? `isbn=${encodeURIComponent(isbn)}&` : '')
+            + (author ? `author=${encodeURIComponent(author)}&` : '')
+            + (title ? `title=${encodeURIComponent(title)}&` : '')
+            + `page=${page}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    displayResults(data.docs);
+                    renderPagination();
+                })
+                .catch(error => {
+                    $resultsDiv.html('<p>Ocurrió un error al buscar. Por favor, intenta de nuevo.</p>');
+                });
+        }
+
+        renderPagination();
     }
 });

@@ -57,3 +57,9 @@ button:hover {
 .book:last-child {
     border-bottom: none;
 }
+
+hr {
+    margin: 20px 0;
+    border: none;
+    border-top: 5px solid #ccc;
+}
